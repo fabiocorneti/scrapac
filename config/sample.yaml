@@ -1,0 +1,9 @@
+elasticsearch:
+  url: https://localhost:9200
+  username: elastic
+  password: changeme
+  index: scrapac
+  ignoreTtlVerification: true
+openai:
+  apikey: yourkey
+  maxRequestsPerMinute: 60
