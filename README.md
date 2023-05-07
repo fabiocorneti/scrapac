@@ -39,3 +39,10 @@ Not available yet.
 ```bash
 ./scrapac ask "How are you?"
 ```
+## Web UI
+
+```bash
+./scrapac serve
+```
+
+Then visit http://localhost:3000 . Note that no authentication or TLS are currently available, so be careful.

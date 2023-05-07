@@ -1,0 +1,77 @@
+@body-background: #212121;
+@body-color: #f2f2f2;
+@form-background: #424242;
+@form-color: #f2f2f2;
+@button-background: #40813c;
+@button-color: #fff;
+@body-color: #333;
+
+body {
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 16px;
+    background-color: @body-background;
+    color: @body-color;
+}
+
+.question {
+    display: block;
+    background-color: @form-background;
+    color: @form-color;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    textarea {
+        box-sizing: border-box;
+        height: 180px;
+        width: 100%;
+        font-size: 14px;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        border: none;
+        box-shadow: inset 0px 0px 5px darken(@form-background, 20%);
+        color: @form-color;
+        background-color: darken(@form-background, 10%);
+    }
+
+    button {
+      background-color: @button-background;
+      color: @button-color;
+      font-size: 20px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+}
+
+.answer {
+    background-color: #FAFAFA;
+    box-shadow: 0px 0px 6px black;
+    border-radius: 5px;
+    margin: 36px;
+    padding: 36px;
+}
+
+.error {
+  display: block;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid red;
+  border-radius: 5px;
+  background-color: #ffe6e6;
+  color: #cc0000;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.loaderWrapper {
+    text-align: center;
+}

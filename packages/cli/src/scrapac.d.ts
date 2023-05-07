@@ -25,6 +25,9 @@ type Configuration = {
     embeddingsSize: number;
     completionModel: string;
   };
+  web: {
+    port: number;
+  };
 };
 
 interface Processor {

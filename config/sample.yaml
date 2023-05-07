@@ -7,3 +7,5 @@ elasticsearch:
 openai:
   apikey: yourkey
   maxRequestsPerMinute: 60
+web:
+  port: 3000

@@ -5,15 +5,14 @@ import Indexer from './indexer';
 import getConfiguration from './configuration';
 import ElasticsearchQuery from './query/elasticsearch';
 import ElasticsearchPersistence from './persistence/elasticsearch';
+import WebApp from './web/app';
 
-const script = new Command();
+const script = new Command().name('scrapac').description('A tool to index files');
 
 // TODO: replace
 getConfiguration();
 
 script
-  .name('scrapac')
-  .description('A tool to index files')
   .command('index')
   .argument('<directory>', 'The directory containing the files to index')
   .action(async (directory) => {
@@ -22,8 +21,6 @@ script
   });
 
 script
-  .name('scrapac')
-  .description('A tool to index files')
   .command('ask')
   .argument('<prompt>', 'The prompt')
   .action(async (prompt) => {
@@ -33,13 +30,14 @@ script
     process.stdout.write('\n');
   });
 
-script
-  .name('scrapac')
-  .description('A tool to index files')
-  .command('init')
-  .action(async () => {
-    const persistence = new ElasticsearchPersistence();
-    await persistence.init();
-  });
+script.command('init').action(async () => {
+  const persistence = new ElasticsearchPersistence();
+  await persistence.init();
+});
+
+script.command('serve').action(async () => {
+  const app = new WebApp();
+  app.start();
+});
 
 script.parse();

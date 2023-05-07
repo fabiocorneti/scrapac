@@ -23,7 +23,7 @@ export default class OpenAIClient {
   private constructor(configuration: Configuration) {
     this.configuration = configuration;
     const openaiConfig = new OpenAIConfiguration({
-      apiKey: configuration.openai.apikey,
+      apiKey: configuration.openai.apikey
     });
     this.api = new OpenAIApi(openaiConfig);
     const maxConcurrent = Math.ceil(
@@ -31,7 +31,7 @@ export default class OpenAIClient {
     );
     this.limiter = new bottleneck({
       maxConcurrent: maxConcurrent,
-      minTime: 60000 / configuration.openai.maxRequestsPerMinute,
+      minTime: 60000 / configuration.openai.maxRequestsPerMinute
     });
   }
 
@@ -40,6 +40,17 @@ export default class OpenAIClient {
       this.instance = new OpenAIClient(getConfiguration());
     }
     return this.instance;
+  }
+
+  public preparePrompt(context: string, prompt: string): string {
+    const aiPrompt = `Given the context below and what you already know, answer my question, use Markdown, and provide code samples if possible.
+
+${context}
+
+Question:
+${prompt}
+`;
+    return aiPrompt;
   }
 
   public countTokens(text: string): number {
@@ -55,7 +66,7 @@ export default class OpenAIClient {
       try {
         const response = await this.api.createEmbedding({
           model: this.configuration.openai.embeddingsModel,
-          input: text,
+          input: text
         });
         return response.data.data[0].embedding;
       } catch (e) {
@@ -68,7 +79,7 @@ export default class OpenAIClient {
     return (await this.limiter.wrap(async (): Promise<boolean> => {
       try {
         const response = await this.api.createModeration({
-          input: prompt,
+          input: prompt
         });
         const results = response.data.results[0];
         return !results.flagged;
@@ -79,25 +90,18 @@ export default class OpenAIClient {
   }
 
   public async prompt(context: string, prompt: string): Promise<string> {
-    const aiPrompt = `Given the context below and what you already know, answer my question and provide code samples if possible.
-
-${context}
-
-Question:
-${prompt}
-`;
-    Logger.getInstance().debug(`Sending prompt to OpenAI: ${aiPrompt}`);
+    const aiPrompt = this.preparePrompt(context, prompt);
     try {
       const response = await this.api.createChatCompletion({
         model: this.configuration.openai.completionModel,
         messages: [
           {
             role: 'user',
-            content: aiPrompt,
-          },
+            content: aiPrompt
+          }
         ],
         temperature: 0,
-        max_tokens: MAX_TOKENS_RESPONSE,
+        max_tokens: MAX_TOKENS_RESPONSE
       });
 
       const results = response.data.choices[0].message.content;
@@ -106,4 +110,28 @@ ${prompt}
       throw new Error(formatAxiosError(e));
     }
   }
+
+  /*
+  public streamingPrompt(context: string, prompt: string): void {
+    const aiPrompt = this.preparePrompt(context, prompt);
+    try {
+      const response = await this.api.createChatCompletion({
+        model: this.configuration.openai.completionModel,
+        messages: [
+          {
+            role: 'user',
+            content: aiPrompt
+          }
+        ],
+        temperature: 0,
+        max_tokens: MAX_TOKENS_RESPONSE
+      });
+
+      const results = response.data.choices[0].message.content;
+      return results;
+    } catch (e) {
+      throw new Error(formatAxiosError(e));
+    }
+  }
+  */
 }

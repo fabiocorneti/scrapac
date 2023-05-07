@@ -1,5 +1,5 @@
-/bin
-/node_modules
-/yarn-error.log
-/config
+/dist
+node_modules
+yarn-error.log
+config
 /.vscode

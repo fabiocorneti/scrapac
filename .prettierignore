@@ -1,5 +1,6 @@
-bin
+dist
 .eslintrc
 *.yaml
 *.md
 *.json
+node_modules

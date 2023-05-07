@@ -16,14 +16,14 @@ export default class ElasticsearchClient {
       baseURL: configuration.elasticsearch.url,
       timeout: 30000,
       httpsAgent: new Agent({
-        rejectUnauthorized: !configuration.elasticsearch.ignoreTlsVerification,
-      }),
+        rejectUnauthorized: !configuration.elasticsearch.ignoreTlsVerification
+      })
     });
     this.requestOptions = {
       auth: {
         username: this.configuration.elasticsearch.username,
-        password: this.configuration.elasticsearch.password,
-      },
+        password: this.configuration.elasticsearch.password
+      }
     };
   }
 
@@ -44,7 +44,7 @@ export default class ElasticsearchClient {
       {
         title: block.title,
         text: block.text,
-        vector: block.vector,
+        vector: block.vector
       },
       this.requestOptions
     );
@@ -68,16 +68,16 @@ export default class ElasticsearchClient {
         query: {
           script_score: {
             query: {
-              match_all: {},
+              match_all: {}
             },
             script: {
               source: "cosineSimilarity(params.query_vector, 'vector') + 1.0",
               params: {
-                query_vector: vector,
-              },
-            },
-          },
-        },
+                query_vector: vector
+              }
+            }
+          }
+        }
       },
       this.requestOptions
     );
@@ -101,22 +101,22 @@ export default class ElasticsearchClient {
         {
           settings: {
             number_of_shards: 3,
-            number_of_replicas: 1,
+            number_of_replicas: 1
           },
           mappings: {
             properties: {
               title: {
-                type: 'text',
+                type: 'text'
               },
               vector: {
                 type: 'dense_vector',
-                dims: this.configuration.openai.embeddingsSize,
+                dims: this.configuration.openai.embeddingsSize
               },
               text: {
-                type: 'text',
-              },
-            },
-          },
+                type: 'text'
+              }
+            }
+          }
         },
         this.requestOptions
       );
